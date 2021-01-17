@@ -1,0 +1,23 @@
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: HelmRepository
+metadata:
+  name: oke-day2
+  namespace: kube-system
+spec:
+  interval: 1m
+  url: https://oqva-io.github.io/oke-day2/charts/
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: observability
+  namespace: kube-system
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: k8s-observability
+      sourceRef:
+        kind: HelmRepository
+        name: oke-day2
+      interval: 1m
