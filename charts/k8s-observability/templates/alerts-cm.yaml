@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: k8s-prometheus-alerts
+data:
+  values.yaml: |
+    serverFiles:
+      alerting_rules.yml:
+        {{- (.Files.Get "alerts/prometheus_alerts.yaml") | nindent 8 }}
+      recording_rules.yml:
+        {{- (.Files.Get "alerts/prometheus_rules.yaml") | nindent 8 }}

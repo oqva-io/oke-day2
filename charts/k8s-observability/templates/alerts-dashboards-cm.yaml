@@ -1,0 +1,13 @@
+{{- range $path, $bytes := .Files.Glob "dashboards/**" }}
+  {{- $name := base (dir $path) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboard-{{ base $path }}
+  labels:
+    grafana_dashboard: "1"
+data:
+  {{ base $path }}: |-
+  {{- $bytes | toString | nindent 4 }}
+---
+{{- end }}

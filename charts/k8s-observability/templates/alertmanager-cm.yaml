@@ -1,0 +1,21 @@
+{{- if .Values.pagerduty_service_key }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: k8s-prometheus-alertmanager
+data:
+  values.yaml: |-
+    alertmanagerFiles:
+      alertmanager.yml:
+        global:
+          pagerduty_url: 'https://events.pagerduty.com/v2/enqueue'
+
+        route:
+          receiver: 'pagerduty-notifications'
+
+        receivers:
+          - name: 'pagerduty-notifications'
+            pagerduty_configs:
+              - service_key: {{ .Values.pagerduty_service_key}}
+                send_resolved: true
+{{- end }}
