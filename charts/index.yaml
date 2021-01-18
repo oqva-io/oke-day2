@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  k8s-observability:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2021-01-18T08:05:02.180101376+02:00"
+    description: A Helm chart for Kubernetes
+    digest: df976f087bbdb78c5f64a085505114c25e3c5e38951331120dba2a8eb1117f2a
+    name: k8s-observability
+    type: application
+    urls:
+    - https://github.com/oqva-io/oke-day2/k8s-observability-0.1.0.tgz
+    version: 0.1.0
+generated: "2021-01-18T08:05:02.174797666+02:00"
