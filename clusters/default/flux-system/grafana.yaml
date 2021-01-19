@@ -1,0 +1,47 @@
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: HelmRepository
+metadata:
+  name: grafana
+  namespace: flux-system
+spec:
+  interval: 1m
+  url: https://grafana.github.io/helm-charts
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: grafana
+  namespace: flux-system
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: grafana
+      version: "6.1.10"
+      sourceRef:
+        kind: HelmRepository
+        name: grafana
+      interval: 1m
+  values:
+    grafana.ini:
+      auth.anonymous:
+        enabled: true
+        org_name: Main Org.
+        org_role: Admin
+    service:
+      type: NodePort
+      nodePort: 30001
+    sidecar:
+      dashboards:
+        enabled: true
+
+    datasources:
+      datasources.yaml:
+        apiVersion: 1
+        datasources:
+          - name: prometheus
+            type: prometheus
+            access: proxy
+            url: http://prometheus-server.flux-system.svc.cluster.local
+            isDefault: true
+            editable: false

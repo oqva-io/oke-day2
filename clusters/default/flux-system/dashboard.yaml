@@ -1,0 +1,63 @@
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: HelmRepository
+metadata:
+  name: kubernetes-dashboard
+  namespace: flux-system
+spec:
+  interval: 1m
+  url: https://kubernetes.github.io/dashboard
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kubernetes-dashboard
+  namespace: flux-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: kubernetes-dashboard
+    namespace: flux-system
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: kubernetes-dashboard
+  namespace: flux-system
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: kubernetes-dashboard
+      sourceRef:
+        kind: HelmRepository
+        name: kubernetes-dashboard
+      interval: 1m
+  values:
+    protocolHttp: true
+    service:
+      nodePort: 30000
+      type: NodePort
+    metricsScraper:
+      enabled: true
+#---
+#apiVersion: v1
+#kind: ServiceAccount
+#metadata:
+#  name: dashboard-admin
+#  namespace: flux-system
+#---
+#apiVersion: rbac.authorization.k8s.io/v1
+#kind: ClusterRoleBinding
+#metadata:
+#  name: dashboard-admin
+#roleRef:
+#  apiGroup: rbac.authorization.k8s.io
+#  kind: ClusterRole
+#  name: cluster-admin
+#subjects:
+#  - kind: ServiceAccount
+#    name: dashboard-admin
+#    namespace: flux-system

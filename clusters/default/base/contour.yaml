@@ -1,0 +1,22 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: contour
+  namespace: kube-system
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: contour
+      sourceRef:
+        kind: HelmRepository
+        name: bitnami
+      interval: 1m
+  values:
+    contour:
+      installCRDs: true
+    envoy:
+      podAnnotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8002"
+        prometheus.io/path: "/stats/prometheus"
